@@ -46,11 +46,11 @@ def get_data(ticker, start, stop, interval="1D"):
 
 
 
-def get_stocks(tickers, start, stop):
+def get_stocks(tickers, start, stop, interval="1D"):
     pf = pd.DataFrame()
     
     for t in tickers:
-        pf[t] = get_data(t, start, stop)
+        pf[t] = get_data(t, start, stop, interval)
     
     return pf
 
