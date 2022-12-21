@@ -15,7 +15,7 @@ def monte_carlo(dataframe, preds, period):
     drift = u - (0.5 * var)
     stdev = log_returns.std()
     
-    dates = pd.bdate_range(start=str(date.today()), end=str(date.today() + datetime.timedelta(days=365*period))).to_list()
+    dates = pd.bdate_range(start=str(dataframe.index[-1]), end=str(dataframe.index[-1] + datetime.timedelta(days=365*period))).to_list()
     
     pred = preds
     t_intervals = len(dates)
