@@ -4,7 +4,7 @@ import re
 import numpy as np
 
 # retrieve stock data, date format: yyyy-mm-dd
-def get_data(ticker, start, stop):
+def get_data(ticker, start, stop, interval="1D"):
     url = "https://afx.kwayisi.org/chart/ngx/" + ticker
     r = requests.get(url)
     js = r.text
@@ -29,15 +29,19 @@ def get_data(ticker, start, stop):
         data["Price"].append(b.split(",")[1])
         
     df = pd.DataFrame(data)
+    df["Date"] = pd.to_datetime(df["Date"])
     df.set_index("Date", inplace=True)
     df["Price"] = df["Price"].str.replace(",", "")
     df["Price"] = df["Price"].astype(float)
     
+    df = df.resample(interval).ffill()
+    
     df = df.loc[start:stop]
-
+    
     print("Successful")
     
     return df
+
 
 
 
