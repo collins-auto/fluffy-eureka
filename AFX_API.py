@@ -72,3 +72,28 @@ def highest_ngx_returns(ticker_list,top_no, start, stop):
     top_list = [stock for stock in stock_returns][:top_no]
         
     return top_list
+
+
+def stock_info(ticker):
+    url = "https://afx.kwayisi.org/ngx/" + ticker
+    response = requests.get(url)
+
+    soup = bs(response.text)
+
+    valuation = soup.find_all("table")[1]
+    v2 = valuation.find_all("tr")[-2]
+    market_cap = v2.find_all("td")[-1].text
+
+    if market_cap[-1] == "T":
+        market_cap = float(market_cap[:-1]) * 1000000000000
+
+    elif market_cap[-1] == "B":
+        market_cap = float(market_cap[:-1]) * 1000000000
+
+    elif market_cap[-1] == "M":
+        market_cap = float(market_cap[:-1]) * 1000000
+        
+    tables = soup.find_all("div", class_="t")
+    sector = tables[3].find_all("dd")[0].text
+
+    return {"Ticker": ticker,  "Sector": sector, "Market Cap": market_cap}
